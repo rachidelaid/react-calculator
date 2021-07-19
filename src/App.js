@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Keys from "./components/Keys";
 import Result from "./components/Result";
 
@@ -113,6 +113,47 @@ const App = () => {
     }
   }
 
+  function handleKeyDown(e) {
+    if (e.type === "keydown") {
+      switch (e.key) {
+        case "+":
+          add();
+          break;
+        case "-":
+          sub();
+          break;
+        case "/":
+          div();
+          break;
+        case "x":
+          mult();
+          break;
+        case "%":
+          purs();
+          break;
+        case "=":
+          equl();
+          break;
+        case "Backspace":
+          delet();
+          break;
+        case ".":
+          if (String(result).length <= 10) {
+            setResult(result + ".");
+          }
+          break;
+        default:
+          if (!isNaN(Number(e.key))) {
+            if (String(result).length <= 10) {
+              setResult(result + e.key);
+            }
+          }
+          break;
+      }
+    }
+  }
+
+  document.onkeydown = handleKeyDown;
   return (
     <div className="container">
       <div className="calculator">
