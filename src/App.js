@@ -5,6 +5,7 @@ import Result from "./components/Result";
 const App = () => {
   const [history, setHistory] = useState("");
   const [result, setResult] = useState("");
+  const [afterEqual, setAfterEqual] = useState(false);
 
   function add() {
     if (history === "") {
@@ -14,6 +15,8 @@ const App = () => {
     } else if (result !== "") {
       setHistory(history + result + "+");
       setResult("");
+    } else if (isNaN(history.slice(history.length - 1))) {
+      setHistory(history.slice(0, -1) + "+");
     }
   }
   function sub() {
@@ -24,6 +27,8 @@ const App = () => {
     } else if (result !== "") {
       setHistory(history + result + "-");
       setResult("");
+    } else if (isNaN(history.slice(history.length - 1))) {
+      setHistory(history.slice(0, -1) + "-");
     }
   }
   function div() {
@@ -34,6 +39,8 @@ const App = () => {
     } else if (result !== "") {
       setHistory(history + result + "/");
       setResult("");
+    } else if (isNaN(history.slice(history.length - 1))) {
+      setHistory(history.slice(0, -1) + "/");
     }
   }
   function mult() {
@@ -44,6 +51,8 @@ const App = () => {
     } else if (result !== "") {
       setHistory(history + result + "*");
       setResult("");
+    } else if (isNaN(history.slice(history.length - 1))) {
+      setHistory(history.slice(0, -1) + "*");
     }
   }
   function purs() {
@@ -54,22 +63,25 @@ const App = () => {
     } else if (result !== "") {
       setHistory(history + result + "%");
       setResult("");
+    } else if (isNaN(history.slice(history.length - 1))) {
+      setHistory(history.slice(0, -1) + "%");
     }
   }
   function equl() {
     if (result === "") {
       if (isNaN(history.slice(history.length - 1))) {
-        const res = String(eval(history.slice(0, -1))).substr(0, 11);
-        setResult(res);
+        const res = eval(history.slice(0, -1)).toFixed(2);
+        setResult(Number(res.toString()));
       } else {
-        const res = String(eval(history)).substr(0, 11);
-        setResult(res);
+        const res = eval(history).toFixed(2);
+        setResult(Number(res.toString()));
       }
     } else {
-      const res = String(eval(history + result)).substr(0, 11);
-      setResult(res);
+      const res = eval(history + result).toFixed(2);
+      setResult(Number(res.toString()));
     }
 
+    setAfterEqual(true);
     setHistory("");
   }
 
@@ -108,7 +120,10 @@ const App = () => {
   }
 
   function num(e) {
-    if (String(result).length <= 10) {
+    if (afterEqual) {
+      setResult(e.target.innerText);
+      setAfterEqual(false);
+    } else if (String(result).length <= 10) {
       setResult(result + e.target.innerText);
     }
   }
